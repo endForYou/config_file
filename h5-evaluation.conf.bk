@@ -1,0 +1,23 @@
+upstream h5-evaluation {
+                server 127.0.0.1:9070;
+    }
+server {
+        listen       80;
+        server_name testevaluation.zhiyazhiyuan.com;
+
+        location / {
+            proxy_pass   http://h5-evaluation;
+                        proxy_read_timeout 600s;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header Host $host:$server_port;
+                        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            index  index.html index.htm;
+        }
+
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
